@@ -5,6 +5,7 @@ from food import Food, FOOD_POSITIONS
 from scoreboard import Scoreboard
 import time
 
+# Tkinter setup
 screen = Screen()
 screen.setup(height=600, width=600)
 screen.bgcolor("black")
@@ -12,31 +13,38 @@ screen.title("Adam's Snake Game")
 screen.tracer(0)
 screen.listen()
 
+# Initialize snake object
 snake = Snake()
 screen.onkey(snake.up, "Up")
 screen.onkey(snake.down, "Down")
 screen.onkey(snake.left, "Left")
 screen.onkey(snake.right, "Right")
 
+# Initialize food object
 food = Food()
 
-
+# Initialize scoreboard object
 scoreboard = Scoreboard()
+
+# Recursive method to play game
 game_on = True
 while game_on:
     screen.update()
     time.sleep(0.1)
     snake.move()
-
+    
+    # Contact with food
     if snake.head.distance(food) < 15:
         food.new_food()
         scoreboard.add_point()
         snake.grow()
-
+    
+    # Game over scenario 1
     if snake.head.xcor() > 280 or snake.head.xcor() < -280 or snake.head.ycor() > 280 or snake.head.ycor() < -280:
         game_on = False
         scoreboard.game_over()
-
+    
+    # Game over scenario 2
     for segment in snake.segments[1:]:
         if snake.head.distance(segment) < 10:
             game_on = False
